@@ -78,10 +78,15 @@ async function record(
 
 /** GET /api/crm/simulate?channel=whatsapp  riwayat simulasi terbaru. */
 export async function GET(request: Request) {
-  const channel = new URL(request.url).searchParams.get("channel");
-  if (channel && !isChannel(channel)) return fail("Parameter channel tidak dikenal.");
+  const channelParam = new URL(request.url).searchParams.get("channel");
 
-  const events = await repository.listCrmEvents(DEMO_USER_ID, channel ?? undefined, 10);
+  let channel: CrmChannel | undefined;
+  if (channelParam !== null) {
+    if (!isChannel(channelParam)) return fail("Parameter channel tidak dikenal.");
+    channel = channelParam;
+  }
+
+  const events = await repository.listCrmEvents(DEMO_USER_ID, channel, 10);
   return ok({ events });
 }
 
