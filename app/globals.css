@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============ DESIGN TOKENS ============ */
+:root {
+  --bg: #05060f;
+  --surface: #10132a;
+  --surface-2: #181c3a;
+  --border: rgba(139, 92, 246, 0.22);
+  --text: #e8e9ff;
+  --text-muted: #9ca0c9;
+  --accent: #8b5cf6;
+  --accent-2: #22d3ee;
+  --radius: 1.25rem;
+}
+
+@layer base {
+  * {
+    @apply border-white/10;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-void-950 font-sans text-[var(--text)] antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background: rgba(139, 92, 246, 0.45);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+/* ============ SCROLLBAR ============ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0c1a;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7c3aed, #22d3ee);
+  border-radius: 999px;
+  border: 2px solid #0a0c1a;
+}
+
+/* ============ KOMPONEN REUSABLE ============ */
+@layer components {
+  /* Kartu neumorfisme gelap */
+  .neu-card {
+    @apply relative rounded-3xl bg-void-800 shadow-neu;
+    background-image: theme("backgroundImage.card-sheen");
+    border: 1px solid var(--border);
+  }
+
+  /* Permukaan cekung (input, panel editor) */
+  .neu-inset {
+    @apply rounded-2xl bg-void-900 shadow-neu-inset;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  /* Efek kaca */
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Tombol 3D taktil (seperti tombol keyboard mekanis) */
+  .btn-3d {
+    @apply relative inline-flex select-none items-center justify-center gap-2 rounded-2xl bg-arcane-600 px-6 py-3 font-display font-semibold text-white shadow-key transition-all duration-100;
+    background-image: linear-gradient(180deg, #9d6bff 0%, #7c3aed 100%);
+  }
+  .btn-3d:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+  .btn-3d:active {
+    transform: translateY(5px);
+    @apply shadow-key-pressed;
+  }
+  .btn-3d:disabled {
+    @apply cursor-not-allowed opacity-50;
+    transform: none;
+  }
+
+  /* Teks bercahaya & gradasi */
+  .text-glow {
+    text-shadow: 0 0 12px rgba(139, 92, 246, 0.8), 0 0 32px rgba(34, 211, 238, 0.4);
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: theme("backgroundImage.arcane-gradient");
+  }
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: theme("backgroundImage.gold-gradient");
+  }
+
+  /* Latar grid futuristik */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Bar XP */
+  .xp-track {
+    @apply relative h-4 w-full overflow-hidden rounded-full bg-void-900 shadow-neu-inset;
+  }
+  .xp-fill {
+    @apply relative h-full rounded-full;
+    background-image: linear-gradient(90deg, #7c3aed, #22d3ee, #a3e635);
+    background-size: 200% 100%;
+    box-shadow: 0 0 16px rgba(34, 211, 238, 0.6);
+  }
+  .xp-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s linear infinite;
+  }
+
+  /* Konteks 3D */
+  .scene-3d {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
+
+/* ============ UTILITAS TAMBAHAN ============ */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* ============ CODEMIRROR (EDITOR) ============ */
+.cm-editor {
+  background: transparent !important;
+  font-family: var(--font-mono), ui-monospace, monospace !important;
+  font-size: 14px;
+  height: 100%;
+}
+.cm-editor.cm-focused {
+  outline: none !important;
+}
+.cm-gutters {
+  background: transparent !important;
+  border-right: 1px solid rgba(139, 92, 246, 0.15) !important;
+  color: #5b5f8f !important;
+}
+.cm-activeLine,
+.cm-activeLineGutter {
+  background: rgba(139, 92, 246, 0.08) !important;
+}
+.cm-tooltip-autocomplete {
+  background: #10132a !important;
+  border: 1px solid rgba(139, 92, 246, 0.4) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.35) !important;
+  overflow: hidden;
+}
+
+/* ============ AKSESIBILITAS ============ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
